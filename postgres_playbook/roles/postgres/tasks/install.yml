@@ -1,0 +1,14 @@
+---
+- name: Install Postgres 9.6
+  yum: name={{item}} state=present
+  with_items:
+   - postgresql96
+   - postgresql96-server
+   - postgresql96-libs
+   - postgresql96-contrib
+
+- name: Create data directory with initdb
+  shell: 'su - postgres -c "/usr/pgsql-9.6/bin/initdb"'
+
+- name: Start Postgres service
+  systemd: name=postgresql-9.6 state=started

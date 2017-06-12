@@ -1,0 +1,31 @@
+#!/bin/bash
+pcs cluster auth {{ cluster_nodes }} -u hacluster -p {{ hacluster_password }}
+pcs cluster setup --name {{ cluster_name }} {{ cluster_nodes }}
+pcs cluster start --all
+pcs -f pgsql_cfg property set no-quorum-policy="ignore"
+pcs -f pgsql_cfg property set stonith-enabled="false"
+pcs -f pgsql_cfg resource defaults resource-stickiness="INFINITY"
+pcs -f pgsql_cfg resource defaults migration-threshold="1"
+pcs -f pgsql_cfg resource create master_vip IPaddr2 ip="{{ master_vip }}" cidr_netmask="{{ master_cidr }}" op monitor interval="10s"
+
+pcs -f pgsql_cfg resource create pgsql pgsql \
+   pgctl="/usr/pgsql-9.6/bin/pg_ctl" \
+   psql="/usr/pgsql-9.6/bin/psql" \
+   pgdata="/var/lib/pgsql/9.6/data" \
+   rep_mode="sync" \
+   node_list="postgres1 postgres2" \
+   primary_conninfo_opt="keepalives_idle=60 keepalives_interval=5 keepalives_count=5" \
+   master_ip="{{ master_vip }}" \
+   restart_on_promote='true' \
+   op start   timeout="60s" interval="0s"  on-fail="restart" \
+   op monitor timeout="60s" interval="4s" on-fail="restart" \
+   op monitor timeout="60s" interval="3s"  on-fail="restart" role="Master" \
+   op promote timeout="60s" interval="0s"  on-fail="restart" \
+   op demote  timeout="60s" interval="0s"  on-fail="stop" \
+   op stop    timeout="60s" interval="0s"  on-fail="block"
+
+pcs -f pgsql_cfg resource master msPostgresql pgsql master-max=1 master-node-max=1 clone-max=2 clone-node-max=1 notify=true
+pcs -f pgsql_cfg constraint colocation add master_vip with Master msPostgresql INFINITY
+pcs -f pgsql_cfg constraint order promote msPostgresql then start master_vip symmetrical=false score=INFINITY
+pcs -f pgsql_cfg constraint order demote  msPostgresql then stop master_vip symmetrical=false score=0
+pcs cluster cib-push pgsql_cfg

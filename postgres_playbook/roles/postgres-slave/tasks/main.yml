@@ -1,0 +1,15 @@
+---
+- name: Stop Postgres 9.6 before anything
+  systemd: name=postgresql-9.6 state=stopped
+
+- name: Delete all old data
+  shell: 'rm -rf /var/lib/pgsql/9.6/data/*'
+
+- name: Copy complete data from master
+  shell: 'su - postgres -c "pg_basebackup -h {{master_ip}} -U postgres -D /var/lib/pgsql/9.6/data -X stream -P"'
+
+- name: Create recovery.conf file on slave
+  template: src=recovery.conf.j2 dest=/var/lib/pgsql/9.6/data/recovery.conf
+
+- name: Start Postgres 9.6 on slave
+  systemd: name=postgresql-9.6 state=started

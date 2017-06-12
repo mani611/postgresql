@@ -1,0 +1,17 @@
+---
+- name: Install Pacemaker and Corosync
+  yum: name={{item}} state=present
+  with_items:
+   - pcs
+   - pacemaker
+   - corosync
+   - resource-agents
+
+- name: Start pcs daemon to manage cluster
+  systemd: name=pcsd state=started enabled=yes
+
+- name: Change password of user hacluster
+  shell: echo {{ hacluster_password }} | passwd --stdin hacluster
+
+- name: Copy pcs setup shell script
+  template: src=cluster_pgsql.sh.j2 dest=/tmp/cluster_pgsql.sh mode=0755

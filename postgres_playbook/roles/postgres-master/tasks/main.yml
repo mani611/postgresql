@@ -1,0 +1,23 @@
+---
+- name: Modify postgres.conf file
+  blockinfile: 
+   dest: /var/lib/pgsql/9.6/data/postgresql.conf
+   block: |
+    listen_addresses = '*'
+    wal_level = hot_standby
+    max_wal_senders = 2
+    hot_standby = on
+    hot_standby_feedback = on
+
+- name: Modify pg_hba.conf file
+  blockinfile:
+   dest: /var/lib/pgsql/9.6/data/pg_hba.conf
+   block: |
+    # forbid self-replication
+    host replication postgres {{master_ip}}/32 reject
+
+    # allow any standby connection
+    host replication postgres 0.0.0.0/0 trust
+
+- name: Restart Postgres 9.6
+  systemd: name=postgresql-9.6 state=restarted

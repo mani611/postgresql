@@ -1,0 +1,3 @@
+---
+- name: Create yum repository of Postgres 9.6
+  copy: src=postgres-96.repo.j2 dest=/etc/yum.repos.d/postgres-96.repo 
