@@ -11,9 +11,8 @@ Two node setup installed with CentOS/Redhat7.
 Roles and Variables
 --------------
 
-postgres - 
---------
-It will enable postgres 9.6 repo and install postgres in standalone mode. No variables required to run 
+postgres - It will enable postgres 9.6 repo and install postgres in standalone mode. No variables required to use this role.
+postgres-master - It will configure postgres server to act as master server and allow replication. 
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Dependencies
