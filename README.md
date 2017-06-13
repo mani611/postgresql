@@ -12,9 +12,9 @@ Roles and Variables
 --------------
 
 A description of the mandatory variables for this playbook is as given here. All these variables need to specify inside main (install.yml) playbook.<br/> 
-**postgres :-** It will enable postgres 9.6 repo and install postgres in standalone mode. No variables required to use this role.
-**postgres-master :-** It will configure postgres server to act as master server and allow replication. Need to specify `master_ip` variable value as server IP itself to restrict self replication.
-**postgres-slave :-** It will configure slave server. Need to specify `master_ip` variable to know the slave about primary connection info.
+**postgres :-** It will enable postgres 9.6 repo and install postgres in standalone mode. No variables required to use this role.<br/>
+**postgres-master :-** It will configure postgres server to act as master server and allow replication. Need to specify `master_ip` variable value as server IP itself to restrict self replication.<br/>
+**postgres-slave :-** It will configure slave server. Need to specify `master_ip` variable to know the slave about primary connection info.<br/>
 
 
 Dependencies
