@@ -15,7 +15,7 @@ A description of the mandatory variables for this playbook is as given here. All
 **postgres :-** It will enable postgres 9.6 repo and install postgres in standalone mode. No variables required to use this role.<br/>
 **postgres-master :-** It will configure postgres server to act as master server and allow replication. Need to specify `master_ip` variable value as server IP itself to restrict self replication.<br/>
 **postgres-slave :-** It will configure slave server. Need to specify `master_ip` variable to know the slave about primary connection info.<br/>
-
+**postgres-pcsinstall :-** It will install all the pacemaker related necessary packages and and also copy the pcs configuration shell script under /tmp/cluster_pgsql.sh .
 
 Dependencies
 ------------
