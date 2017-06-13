@@ -1,7 +1,7 @@
-postgresql
-=========
+Postgresql Master/Slave
+=======================
 
-Installs and manages postgresql.
+Installs postgresql in master/slave and Failover using Pacemaker.
 
 Requirements
 ------------
