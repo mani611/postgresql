@@ -25,10 +25,45 @@ Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+```
+---
+- name: Install Postgres 9.6
+  hosts: all
+  roles:
+   - postgres
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+- name: Configure Postgres 9.6 master
+  hosts: master
+  vars:
+    master_ip: 172.16.0.200
+  roles:
+   - postgres-master
+
+- name: Configure Postgres 9.6 slave
+  hosts: slave
+  vars:
+    master_ip: 172.16.0.200
+  roles:
+   - postgres-slave
+
+- name: Install Pacemaker and Corosync
+  hosts: all
+  vars:
+   hacluster_password: hacluster
+   cluster_name: cluster_pgsql
+   cluster_nodes: postgres1 postgres2
+   master_vip: 172.16.0.210
+   master_cidr: 24
+  roles:
+   - postgres-pcsinstall
+  tasks:
+   - shell: 'systemctl stop postgresql-9.6'
+
+- name: Configure Pacemaker Cluster
+  hosts: master
+  tasks:
+   - shell: '/bin/bash < /tmp/cluster_pgsql.sh'
+```
 
 License
 -------
