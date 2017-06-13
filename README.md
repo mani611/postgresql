@@ -37,5 +37,5 @@ Author Information
 ------------------
 
 
-Derived from [zzet's excellent postgresql role](https://github.com/zzet/ansible-postgresql-role)
+Derived from 
 
