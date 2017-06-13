@@ -15,17 +15,23 @@ A description of the mandatory variables for this playbook is as given here. All
 **postgres :-** It will enable postgres 9.6 repo and install postgres in standalone mode. No variables required to use this role.<br/>
 **postgres-master :-** It will configure postgres server to act as master server and allow replication. Need to specify `master_ip` variable value as server IP itself to restrict self replication.<br/>
 **postgres-slave :-** It will configure slave server. Need to specify `master_ip` variable to know the slave about primary connection info.<br/>
-**postgres-pcsinstall :-** It will install all the pacemaker related necessary packages and and also copy the pcs configuration shell script under /tmp/cluster_pgsql.sh .
+**postgres-pcsinstall :-** It will install all the pacemaker related necessary packages and and also copy the pcs configuration shell script under /tmp/cluster_pgsql.sh . Here we have some variables that will get replaced in shell script before copy it on target server.
+``hacluster_password`` Password for hacluster user.
+``cluster_name`` Name to setup cluster with.
+``cluster_nodes`` Hostname of both cluster node separated by space (e.g. node1 node2).
+``master_vip`` Virtual IP for Master node.
+``master_cidr`` CIDR for Virtual IP address (e.g. 24).
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+All the server should be setup with os base repository and accesible using hostname.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Example of how to use your role in install.yml and also passed the varibales in this main playbokk itslef. 
+
 ```
 ---
 - name: Install Postgres 9.6
@@ -65,15 +71,10 @@ Including an example of how to use your role (for instance, with variables passe
   tasks:
    - shell: '/bin/bash < /tmp/cluster_pgsql.sh'
 ```
-
-License
--------
-
-MIT
+**Note :** Kindly pay attention over "Install Pacemaker and Corosync" play. Here, we are directly stopping pacemaker service. It is required because, pacemaker will take care of postgres service.
 
 Author Information
 ------------------
 
-
-Derived from 
+Shabbir Ahmad 
 
