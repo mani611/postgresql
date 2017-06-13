@@ -2,11 +2,12 @@ Postgresql Master/Slave
 =======================
 
 Installs postgresql in master/slave and Failover using Pacemaker.
+This playbook will deploy postgres in replication mode and can be also used to enable failover using Pacemaker.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Two node setup.
 
 Role Variables
 --------------
